@@ -25,7 +25,10 @@ WSD	풍속	m/s
     def week(self):     #중기예보
         pass
     def find(self):     #주소찾기
-        pass
+        path = self.FindEntry.get()
+        img = PhotoImage(file=path)
+        self.TodayLabel.configure(image=img)
+        self.TodayLabel.image = img
     def gmail(self):    #gmail로 송신
         pass
     def tel(self):      #텔레그램으로 송신
@@ -41,22 +44,23 @@ WSD	풍속	m/s
         frame3.pack()
         frame4 = Frame(window)
         frame4.pack()
+        TodayImage = PhotoImage(file="image/one.gif")
 
         #image1 = PhotoImage(file='one.gif')
 
-        self.place = StringVar()
-        Entry(frame, textvariable=self.place, width=20).pack(side=LEFT)
-        Button(frame, text='검색', command=self.find).pack(side=LEFT)     #커맨드 xml 가져오게 만들기
+        FindEntry = Entry(frame, width=15)
+        FindEntry.pack(side=LEFT)
+        FindButton = Button(frame, text='검색', command=self.find)     #커맨드 xml 가져오게 만들기
+        FindButton.pack(side=LEFT)
         Button(frame, text='telegram', command=self.tel).pack(side=RIGHT)    #텔레그램 이미지로 변경할 것
         Button(frame, text='gmail', command=self.gmail).pack(side=RIGHT)    #gmail 이미지로 변경할 것
-        self.canvas1 = Canvas(frame2, width=300, height=100, bg='white')
-        self.canvas1.pack()
-        self.canvas2 = Canvas(frame3, width=300, height=100, bg='red')
-        self.canvas2.pack()
-        self.canvas3 = Canvas(frame4, width=300, height=100, bg='green')
-        self.canvas3.pack()
+        self.TodayLabel = Label(frame2, width=50, height=10, bg='white')
+        self.TodayLabel.pack()
+        self.DustLabel = Label(frame3, width=50, height=10, bg='red')
+        self.DustLabel.pack()
+        self.WeekLabel = Label(frame4, width=50, height=10, bg='green')
+        self.WeekLabel.pack()
 
         window.mainloop()
 
 MainGUI()
-
