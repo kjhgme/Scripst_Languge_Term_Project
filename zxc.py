@@ -9,11 +9,11 @@ import urllib
 import http.client
 from xml.dom.minidom import parse, parseString
 
-
+DataList =[]        #날씨
 t = time.time()
 today = int(time.strftime("%Y%m%d", time.localtime(t)))
 hour = int(time.strftime('%H', time.localtime(time.time())))
-if hour < 9:
+if hour < 5:
     today = today - 1
 today = str(today)
 
@@ -102,17 +102,31 @@ def FindButtonAction():
     SearchTodayWeather()
 
 def SearchTodayWeather():
+    global DataList
+    DataList.clear()
     conn = http.client.HTTPConnection("apis.data.go.kr")
-    conn.request("GET", "/1360000/VilageFcstInfoService/getVilageFcst?serviceKey=nFdn9jA2fHpN1RgksG1a6Gc%2FOIjJoKwMOD1Dx0J6kftuZ06MWg2mmy27TWb52n7ONuQ6%2B%2FyWmEXYjs69QPUgNg%3D%3D&pageNo=1&numOfRows=10&dataType=XML&base_date=" + today + "&base_time=0500&nx=" + px + "&ny=" + py)
+    conn.request("GET", "/1360000/VilageFcstInfoService/getVilageFcst?serviceKey=nFdn9jA2fHpN1RgksG1a6Gc%2FOIjJoKwMOD1Dx0J6kftuZ06MWg2mmy27TWb52n7ONuQ6%2B%2FyWmEXYjs69QPUgNg%3D%3D&pageNo=1&numOfRows=255&dataType=XML&base_date=" + today + "&base_time=0500&nx=" + px + "&ny=" + py)
     req = conn.getresponse()
-    print(req.status, req.reason)
+    #print(req.status, req.reason)
     if req.status == 200:
-        req.read().decode('utf-8')
+        strXml = req.read().decode('utf-8')
+        if strXml == None:
+            print("error.")
+        else:
+            print("OK")
+            parseData = parseString(strXml)
+            WeatherData = parseData.childNodes
+            weatheritem = WeatherData[0].childNodes
+            print(weatheritem[0])
 
     TodayWeather()
 
 def TodayWeather():
     global TodayWeatherLabel
+    global labelList
+    #x  = []
+    #x.append(PhotoImage(file='image/cloudy.jpg'))
+    #TodayWeatherLabel = Label(window, image=x)
     TodayWeatherLabel = Label(window, width=50, height=10, bg='green')
     TodayWeatherLabel.pack()
     TodayWeatherLabel.place(x=20, y=80)
