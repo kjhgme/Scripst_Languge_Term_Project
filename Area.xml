@@ -1,35 +1,157 @@
-<?xml version="1.0" ?>
-<booklist cnt="3">
- <book ISBN="0399250395">
-       <title>The Very Hungry Caterpillar Pop-Up Book</title>
-       <author name="Eric Carle"/>
- <author name="Keith Finch"/>
- <publisher> Philomel Books</publisher>
- <description> Celebrating the 40th anniverary of one of the most popular children's books ever created</description>
- </book>
- <book ISBN="0964729237">
-    <title lang="english">The Shack</title>
- </book>
- <book ISBN="0553281097">
-    <title>You Can Negotiate Anything</title>
-    <author name="Herb Cohen"/>
-    <category cid="12">Negotiate and narrative skill</category>
- </book>
-</booklist>
-
-<?xml version="1.0" ?>
-<
-# 서울 60 127
-        경기 60 120
-강원도 73 134
-충청남도 68 100
-충청북도 69 107
-인천광역시 55 124
-경상북도 89 91
-경상남도 91 77
-전라북도 63 89
-전라남도 51 67
-부산광역시 98 76
-울산광역시 102 84
-제주특별자치도 52 38
-독도 144 123
+<?xml version="1.0" encoding="UTF-8"?>
+<Arealist>
+    <Area>
+        <name>
+            경기도
+        </name>
+        <nx>
+            60
+        </nx>
+        <ny>
+            120
+        </ny>
+    </Area>
+    <Area>
+        <name>
+            서울특별시
+        </name>
+        <nx>
+            60
+        </nx>
+        <ny>
+            127
+        </ny>
+    </Area>
+    <Area>
+        <name>
+            강원도
+        </name>
+        <nx>
+            73
+        </nx>
+        <ny>
+            134
+        </ny>
+    </Area>
+    <Area>
+        <name>
+            충청남도
+        </name>
+        <nx>
+            68
+        </nx>
+        <ny>
+            100
+        </ny>
+    </Area>
+    <Area>
+        <name>
+            충청북도
+        </name>
+        <nx>
+            69
+        </nx>
+        <ny>
+            107
+        </ny>
+    </Area>
+    <Area>
+        <name>
+            인천광역시
+        </name>
+        <nx>
+            55
+        </nx>
+        <ny>
+            124
+        </ny>
+    </Area>
+    <Area>
+        <name>
+            경상북도
+        </name>
+        <nx>
+            89
+        </nx>
+        <ny>
+            91
+        </ny>
+    </Area>
+    <Area>
+        <name>
+            경상남도
+        </name>
+        <nx>
+            91
+        </nx>
+        <ny>
+            77
+        </ny>
+    </Area>
+    <Area>
+        <name>
+            전라북도
+        </name>
+        <nx>
+            63
+        </nx>
+        <ny>
+            89
+        </ny>
+    </Area>
+    <Area>
+        <name>
+            전라남도
+        </name>
+        <nx>
+            51
+        </nx>
+        <ny>
+            67
+        </ny>
+    </Area>
+    <Area>
+        <name>
+            부산광역시
+        </name>
+        <nx>
+            98
+        </nx>
+        <ny>
+            76
+        </ny>
+    </Area>
+    <Area>
+        <name>
+            울산광역시
+        </name>
+        <nx>
+            102
+        </nx>
+        <ny>
+            84
+        </ny>
+    </Area>
+    <Area>
+        <name>
+            제주특별자치도
+        </name>
+        <nx>
+            52
+        </nx>
+        <ny>
+            38
+        </ny>
+    </Area>
+    <Area>
+        <name>
+            독도
+        </name>
+        <nx>
+            144
+        </nx>
+        <ny>
+            123
+        </ny>
+    </Area>
+</Arealist>

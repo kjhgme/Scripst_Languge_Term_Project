@@ -34,7 +34,7 @@ class MainGUI:
         window.title('24점 게임')
         self.index = [i for i in range(52)]
         self.imageList = []
-        for i in range(1,53):
+        for i in range(1, 53):
             self.imageList.append(PhotoImage(file='image/card/'+str(i)+'.gif'))
         Button(text='새로고침', command=self.refresh).pack()
         frame1 = Frame(window)
