@@ -9,26 +9,40 @@ import urllib
 import http.client
 from xml.dom.minidom import parse, parseString
 
-DataList =[]        #날씨
+
 t = time.time()
 today = int(time.strftime("%Y%m%d", time.localtime(t)))
 hour = int(time.strftime('%H', time.localtime(time.time())))
-if hour < 5:
-    today = today - 1
+if 3 < hour and hour < 6:
+    hour = 23
+    today = today -1
+elif 6 < hour and hour < 9:
+    hour = 2
+elif 9 < hour and hour < 12:
+    hour = 5
+elif 12 < hour and hour < 15:
+    hour = 8
+elif 15 < hour and hour < 18:
+    hour = 11
+elif 18 < hour and hour < 21:
+    hour = 14
+elif 21 < hour:
+    hour = 17
+elif hour < 3:
+    hour = 20
 today = str(today)
 
 ##### global
 loopFlag = 1
 xmlFD = -1
-BooksDoc = None
+strXml = None
 px = '0'
 py = '0'
 
 window = Tk()
 window.title('집 밖은 위험해.')
 window.geometry("400x600")
-TodayList = []
-TodayList.append(PhotoImage(file='image/one.gif'))
+TodayImageList = []
 
 def InitTopText():
     TempFont = font.Font(window, size=20, weight='bold', family='Consolas')
@@ -102,42 +116,88 @@ def FindButtonAction():
     SearchTodayWeather()
 
 def SearchTodayWeather():
-    global DataList
-    DataList.clear()
+    categorys = dict()
+    categorys.clear()
     conn = http.client.HTTPConnection("apis.data.go.kr")
-    conn.request("GET", "/1360000/VilageFcstInfoService/getVilageFcst?serviceKey=nFdn9jA2fHpN1RgksG1a6Gc%2FOIjJoKwMOD1Dx0J6kftuZ06MWg2mmy27TWb52n7ONuQ6%2B%2FyWmEXYjs69QPUgNg%3D%3D&pageNo=1&numOfRows=255&dataType=XML&base_date=" + today + "&base_time=0500&nx=" + px + "&ny=" + py)
+    conn.request("GET", "/1360000/VilageFcstInfoService/getVilageFcst?serviceKey=nFdn9jA2fHpN1RgksG1a6Gc%2FOIjJoKwMOD1Dx0J6kftuZ06MWg2mmy27TWb52n7ONuQ6%2B%2FyWmEXYjs69QPUgNg%3D%3D&pageNo=1&numOfRows=9&dataType=XML&base_date=" + today + "&base_time=0500&nx=" + px + "&ny=" + py)
     req = conn.getresponse()
+
     #print(req.status, req.reason)
     if req.status == 200:
         strXml = req.read().decode('utf-8')
         if strXml == None:
             print("error.")
         else:
-            print("OK")
-            parseData = parseString(strXml)
-            WeatherData = parseData.childNodes
-            weatheritem = WeatherData[0].childNodes
-            print(weatheritem[0])
+            print("OK")         #작동하는지 확인용
+            #parseData = parseString(strXml)
+            tree = ElementTree.fromstring(strXml)
+            print(strXml)
+            itemElements = tree.iter('item')
+
+            for item in itemElements:
+                fcstDate = item.find("fcstDate")
+                fcstTime = item.find("fcstTime")
+                category = item.find("category")
+                fcstValue = item.find("fcstValue")
+                if len(category.text) > 0:
+                    categorys[category.text] = fcstValue.text
+
+    for k, v in categorys.items():
+            if k == 'PTY' and v == '0':
+                print('nothing')
+            elif k == 'PTY' and v == '1':
+                print('비')
+                TodayImageList.append(PhotoImage(file='image/NB08.png'))
+            elif k == 'PTY' and v == '2':
+                print('비/눈')
+                TodayImageList.append(PhotoImage(file='image/NB12.png'))
+            elif k == 'PTY' and v == '3':
+                print('눈')
+                TodayImageList.append(PhotoImage(file='image/NB11.png'))
+            elif k == 'PTY' and v == '4':
+                print('소나기')
+                TodayImageList.append(PhotoImage(file='image/NB07.png'))
+            elif k == 'PTY' and v == '5':
+                print('빗방울')
+                TodayImageList.append(PhotoImage(file='image/NB20.png'))
+            elif k == 'PTY' and v == '6':
+                print('빗방울/눈날림')
+                TodayImageList.append(PhotoImage(file='image/NB22.png'))
+            elif k == 'PTY' and v == '7':
+                print('눈날림')
+                TodayImageList.append(PhotoImage(file='image/NB21.png'))
+            if k == 'SKY' and v == '1':
+                print("맑음")
+                TodayImageList.append(PhotoImage(file='image/NB01.png'))
+            elif k == 'SKY' and v == '3':
+                print("구름많음")
+                TodayImageList.append(PhotoImage(file='image/NB03.png'))
+            elif k == 'SKY' and v == '4':
+                print("흐림")
+                TodayImageList.append(PhotoImage(file='image/NB04.png'))
+            if k == 'POP':
+                print("강수량 : ", v, "%")
+            if k == 'T3H':
+                print("온도 :", v)
 
     TodayWeather()
 
+i = -1
 def TodayWeather():
-    global TodayWeatherLabel
-    global labelList
-    #x  = []
-    #x.append(PhotoImage(file='image/cloudy.jpg'))
-    #TodayWeatherLabel = Label(window, image=x)
-    TodayWeatherLabel = Label(window, width=50, height=10, bg='green')
-    TodayWeatherLabel.pack()
-    TodayWeatherLabel.place(x=20, y=80)
-
+    global i
+    TodayLabel = Label(window, bg='white', width=50, height=10)
+    TodayLabel.pack()
+    TodayLabel.place(x=20, y=80)
+    i = i + 1
+    if i < 0:
+        TodayLabel = Label(window, bg='white', image=TodayImageList, width=50, height=10)
+    print(i)
 
 
 
 InitTopText()
 Find()
 FindButton()
-FindButtonAction()
 TodayWeather()
 window.mainloop()
 
