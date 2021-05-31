@@ -1,8 +1,9 @@
 from tkinter import *
+from tkinter.ttk import *
 from tkinter import font
 import tkinter.messagebox
 from tkinter.simpledialog import *
-from xml.dom.minidom import parse, parseString # minidom 모듈의 파싱 함수를 임포트합니다.
+from xml.dom.minidom import parse, parseString  # minidom 모듈의 파싱 함수를 임포트합니다.
 from xml.etree import ElementTree
 import time
 import urllib
@@ -13,22 +14,22 @@ from xml.dom.minidom import parse, parseString
 t = time.time()
 today = int(time.strftime("%Y%m%d", time.localtime(t)))
 hour = int(time.strftime('%H', time.localtime(time.time())))
-if 3 < hour and hour < 6:
+if 3 < hour <= 6:
     hour = 23
-    today = today -1
-elif 6 < hour and hour < 9:
+    today = today - 1
+elif 6 < hour <= 9:
     hour = 2
-elif 9 < hour and hour < 12:
+elif 9 < hour <= 12:
     hour = 5
-elif 12 < hour and hour < 15:
+elif 12 < hour <= 15:
     hour = 8
-elif 15 < hour and hour < 18:
+elif 15 < hour <= 18:
     hour = 11
-elif 18 < hour and hour < 21:
+elif 18 < hour <= 21:
     hour = 14
-elif 21 < hour:
+elif 21 <= hour:
     hour = 17
-elif hour < 3:
+elif hour <= 3:
     hour = 20
 today = str(today)
 
@@ -65,6 +66,7 @@ def FindButton():   #initsearchbutton
     FindButton.place(x=135, y=42)
 
 def FindButtonAction():
+    openNewWindow()
     FindPlace = place.get()
     global px
     global py
@@ -115,6 +117,24 @@ def FindButtonAction():
         py = '0'
     SearchTodayWeather()
 
+def openNewWindow():
+    global PlaceText
+    newWindow = Toplevel(window)
+    newWindow.title("New Window")
+    newWindow.geometry("302x400")
+    TextScrollbar = Scrollbar(newWindow)
+    TextScrollbar.pack()
+    TextScrollbar.place(x=280, y=200)
+    PlaceText = Text(newWindow, width=40, height=28, yscrollcommand=TextScrollbar.set)
+    PlaceText.pack()
+    PlaceText.place(x=0, y=0)
+    TextScrollbar.config(command=PlaceText.yview)
+    TextScrollbar.pack(side=RIGHT, fill=BOTH)
+    PlaceText.configure(state='disabled')
+    quitButton = Button(newWindow, command=newWindow.destroy, text='검색')
+    quitButton.pack()
+    quitButton.place(x=140, y=370)
+
 def SearchTodayWeather():
     categorys = dict()
     categorys.clear()
@@ -145,6 +165,7 @@ def SearchTodayWeather():
     for k, v in categorys.items():
             if k == 'PTY' and v == '0':
                 print('nothing')
+                TodayImageList.append(PhotoImage(file='image/NB01.png'))
             elif k == 'PTY' and v == '1':
                 print('비')
                 TodayImageList.append(PhotoImage(file='image/NB08.png'))
@@ -182,7 +203,8 @@ def SearchTodayWeather():
 
     TodayWeather()
 
-i = -1
+bm = PhotoImage(file='image/NB01.png')
+i = -1              #사진 리스트 순서 조절
 def TodayWeather():
     global i
     TodayLabel = Label(window, bg='white', width=50, height=10)
@@ -190,15 +212,23 @@ def TodayWeather():
     TodayLabel.place(x=20, y=80)
     i = i + 1
     if i < 0:
-        TodayLabel = Label(window, bg='white', image=TodayImageList, width=50, height=10)
+        TodayLabel = Label(window, image=TodayImageList, width=50, height=10)
     print(i)
 
+def TodayDust():
+    DustLabel = Label(window, bg='cyan', width=50, height=10)
+    DustLabel.pack()
+    DustLabel.place(x=20, y=240)
 
+def WeekWeather():
+    WeekLabel = Label(window, bg='hot pink', width=50, height=10)
+    WeekLabel.pack()
+    WeekLabel.place(x=20, y=400)
 
 InitTopText()
 Find()
 FindButton()
 TodayWeather()
+TodayDust()
+WeekWeather()
 window.mainloop()
-
-#시간 고치기
