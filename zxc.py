@@ -1,3 +1,4 @@
+import datetime
 from tkinter import *
 from tkinter.ttk import *
 from tkinter import font
@@ -14,9 +15,12 @@ from xml.dom.minidom import parse, parseString
 t = time.time()
 today = int(time.strftime("%Y%m%d", time.localtime(t)))
 hour = int(time.strftime('%H', time.localtime(time.time())))
+
+today1 = datetime.datetime.now()
+print(today1)
+
 if 3 < hour <= 6:
     hour = 23
-    today = today - 1
 elif 6 < hour <= 9:
     hour = 2
 elif 9 < hour <= 12:
@@ -31,11 +35,13 @@ elif 21 <= hour:
     hour = 17
 elif hour <= 3:
     hour = 20
+    if today % 100 - 1 == 0:
+        today = today
+    else:
+        today = today - 1
+
 today = str(today)
 
-##### global
-loopFlag = 1
-xmlFD = -1
 strXml = None
 px = '0'
 py = '0'
@@ -61,12 +67,11 @@ def Find(): #initsearchlistbox
 
 def FindButton():   #initsearchbutton
     TempFont = font.Font(window, size=10, weight='bold', family='Consolas')
-    FindButton = Button(window, font=TempFont, text='검색', command=FindButtonAction)
+    FindButton = Button(window, font=TempFont, text='검색', command=openNewWindow)
     FindButton.pack()
     FindButton.place(x=135, y=42)
 
 def FindButtonAction():
-    openNewWindow()
     FindPlace = place.get()
     global px
     global py
@@ -115,25 +120,41 @@ def FindButtonAction():
     else:
         px = '0'
         py = '0'
+
     SearchTodayWeather()
 
 def openNewWindow():
     global PlaceText
+    FindPlace = place.get()
     newWindow = Toplevel(window)
     newWindow.title("New Window")
     newWindow.geometry("302x400")
+
+    placeEntry = Entry(newWindow, textvariable=place, width=20)
+    placeEntry.pack()
+    placeEntry.place(x=5, y=5)
+
+    placeButton = Button(newWindow, text='검색', command=FindButtonAction)
+    placeButton.pack()
+    placeButton.place(x=155, y=2)
+
     TextScrollbar = Scrollbar(newWindow)
     TextScrollbar.pack()
     TextScrollbar.place(x=280, y=200)
-    PlaceText = Text(newWindow, width=40, height=28, yscrollcommand=TextScrollbar.set)
+
+    PlaceText = Text(newWindow, width=40, height=26, yscrollcommand=TextScrollbar.set)
     PlaceText.pack()
-    PlaceText.place(x=0, y=0)
+    PlaceText.place(x=0, y=30)
+    PlaceText.configure(state='disabled')
+
     TextScrollbar.config(command=PlaceText.yview)
     TextScrollbar.pack(side=RIGHT, fill=BOTH)
-    PlaceText.configure(state='disabled')
-    quitButton = Button(newWindow, command=newWindow.destroy, text='검색')
+
+
+    quitButton = Button(newWindow, command=newWindow.destroy, text='날씨 확인')
     quitButton.pack()
-    quitButton.place(x=140, y=370)
+    quitButton.place(x=120, y=375)
+
 
 def SearchTodayWeather():
     categorys = dict()
@@ -215,20 +236,33 @@ def TodayWeather():
         TodayLabel = Label(window, image=TodayImageList, width=50, height=10)
     print(i)
 
-def TodayDust():
+def TodayDustLabel():
     DustLabel = Label(window, bg='cyan', width=50, height=10)
     DustLabel.pack()
     DustLabel.place(x=20, y=240)
+    TodayDust()
 
-def WeekWeather():
+def TodayDust():
+    DustImageLabel = Label(window, bg='white')
+    DustImageLabel.pack()
+    DustImageLabel.place(x=40, y=260)
+
+
+def WeekWeatherLabel():
     WeekLabel = Label(window, bg='hot pink', width=50, height=10)
     WeekLabel.pack()
     WeekLabel.place(x=20, y=400)
+    WeekWeather()
+
+def WeekWeather():
+    WeekImageLabel = Label(window, bg='white')
+    WeekImageLabel.pack()
+    WeekImageLabel.place(x=200, y=460)
 
 InitTopText()
 Find()
 FindButton()
 TodayWeather()
-TodayDust()
-WeekWeather()
+TodayDustLabel()
+WeekWeatherLabel()
 window.mainloop()
